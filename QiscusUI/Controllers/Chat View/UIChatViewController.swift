@@ -286,6 +286,23 @@ open class UIChatViewController: UIViewController {
         self.tableViewConversation.register(nib, forCellReuseIdentifier: reuseIdentifier)
     }
     
+    public func scrollToComment(comment: CommentModel) {
+        if let indexPath = self.presenter.getIndexPath(comment: comment) {
+            if let visible = tableViewConversation.indexPathsForVisibleRows {
+                if !visible.contains(indexPath) {
+                    // cell is not visible, scroll required
+                     self.tableViewConversation.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                    
+                    self.tableViewConversation.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+                    self.tableViewConversation.deselectRow(at: indexPath, animated: true)
+                } else {
+                    // no need to scroll, just highlight
+                    tableViewConversation.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+                    tableViewConversation.deselectRow(at: indexPath, animated: true)
+                }
+            }
+        }
+    }
     
     public func setBackground(with image: UIImage) {
         let imageView = UIImageView(image: image)
